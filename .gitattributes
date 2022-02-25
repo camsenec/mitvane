@@ -45,3 +45,4 @@
 *.app   binary
 
 vanetza-extension/asn1/*/*.c linguist-detectable=false
+vanetza-extension/asn1/*/*.h linguist-detectable=false
