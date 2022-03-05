@@ -19,8 +19,8 @@
  */
 
 
-#ifndef SPATEM_HPP_XGC8NRDI
-#define SPATEM_HPP_XGC8NRDI
+#ifndef SPATEM_HPP
+#define SPATEM_HPP
 
 #include "vanetza-extension/asn1/asn1c_wrapper.hpp"
 #include "vanetza-extension/asn1/its/SPATEM.h"
@@ -40,5 +40,5 @@ public:
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* SPATEM_HPP_XGC8NRDI */
+#endif /* SPATEM_HPP */
 

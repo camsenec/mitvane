@@ -27,8 +27,8 @@
 */
 
 
-#ifndef ASN1C_CONVERSION_HPP_9E5QN6UC
-#define ASN1C_CONVERSION_HPP_9E5QN6UC
+#ifndef ASN1C_CONVERSION_HPP
+#define ASN1C_CONVERSION_HPP
 
 #include "vanetza-extension/asn1/asn1c_wrapper.hpp"
 #include <vanetza/common/byte_buffer_convertible.hpp>
@@ -88,5 +88,5 @@ private:
 } // namespace convertible
 } // namespace vanetzaExtension
 
-#endif /* ASN1C_CONVERSION_HPP_9E5QN6UC */
+#endif /* ASN1C_CONVERSION_HPP */
 

@@ -27,8 +27,8 @@
 */
 
 
-#ifndef CAM_HPP_WXYNEKFN
-#define CAM_HPP_WXYNEKFN
+#ifndef CAM_HPP
+#define CAM_HPP
 
 #include "vanetza-extension/asn1/asn1c_wrapper.hpp"
 #include "vanetza-extension/asn1/its/CAM.h"
@@ -48,5 +48,5 @@ public:
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* CAM_HPP_WXYNEKFN */
+#endif /* CAM_HPP */
 

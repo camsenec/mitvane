@@ -27,8 +27,8 @@
 */
 
 
-#ifndef DENM_HPP_XGC8NRDI
-#define DENM_HPP_XGC8NRDI
+#ifndef DENM_HPP
+#define DENM_HPP
 
 #include "vanetza-extension/asn1/asn1c_wrapper.hpp"
 #include "vanetza-extension/asn1/its/DENM.h"
@@ -48,5 +48,5 @@ public:
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* DENM_HPP_XGC8NRDI */
+#endif /* DENM_HPP */
 

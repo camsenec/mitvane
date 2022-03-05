@@ -27,8 +27,8 @@
 */
 
 
-#ifndef ASN1C_WRAPPER_HPP_ZCNDO8E5
-#define ASN1C_WRAPPER_HPP_ZCNDO8E5
+#ifndef ASN1C_WRAPPER_HPP
+#define ASN1C_WRAPPER_HPP
 
 #include "vanetza-extension/asn1/support/asn_system.h"
 #include "vanetza-extension/asn1/support/constr_TYPE.h"
@@ -240,5 +240,5 @@ public:
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* ASN1C_WRAPPER_HPP_ZCNDO8E5 */
+#endif /* ASN1C_WRAPPER_HPP */
 

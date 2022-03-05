@@ -27,8 +27,8 @@
 */
 
 
-#ifndef PACKET_VISITOR_HPP_UYSI8HXZ
-#define PACKET_VISITOR_HPP_UYSI8HXZ
+#ifndef PACKET_VISITOR_HPP
+#define PACKET_VISITOR_HPP
 
 #include "vanetza-extension/asn1/asn1c_conversion.hpp"
 #include <vanetza/common/byte_buffer.hpp>
@@ -115,5 +115,5 @@ class PacketVisitor : public boost::static_visitor<std::shared_ptr<const T>>
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* PACKET_VISITOR_HPP_UYSI8HXZ */
+#endif /* PACKET_VISITOR_HPP */
 

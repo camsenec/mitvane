@@ -19,8 +19,8 @@
  */
 
 
-#ifndef MAPEM_HPP_XGC8NRDI
-#define MAPEM_HPP_XGC8NRDI
+#ifndef MAPEM_HPP
+#define MAPEM_HPP
 
 #include "vanetza-extension/asn1/asn1c_wrapper.hpp"
 #include "vanetza-extension/asn1/its/MAPEM.h"
@@ -40,5 +40,5 @@ public:
 } // namespace asn1
 } // namespace vanetzaExtension
 
-#endif /* MAPEM_HPP_XGC8NRDI */
+#endif /* MAPEM_HPP */
 
