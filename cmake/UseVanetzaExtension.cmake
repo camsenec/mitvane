@@ -35,7 +35,7 @@ function(add_vanetza_extension_component name)
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>)
     set_target_properties(${name} PROPERTIES
-        OUTPUT_NAME vanetza_${name})
+        OUTPUT_NAME vanetza_extension_${name})
     set_property(GLOBAL APPEND PROPERTY VANETZA_EXTENSION_COMPONENTS ${name})
 endfunction()
 
