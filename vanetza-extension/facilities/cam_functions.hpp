@@ -29,8 +29,8 @@
 */
 
 
-#ifndef CAM_FUNCTIONS_HPP_PUFKBEM8
-#define CAM_FUNCTIONS_HPP_PUFKBEM8
+#ifndef CAM_FUNCTIONS_HPP
+#define CAM_FUNCTIONS_HPP
 
 #include "vanetza-extension/asn1/its/Heading.h"
 #include <vanetza/security/cam_ssp.hpp>
@@ -53,14 +53,6 @@ namespace facilities
 namespace cam
 {
 
-class PathHistory;
-
-/**
- * Copy PathHistory into BasicVehicleContainerLowFrequency's pathHistory element
- * \param Facilities' path history object (source)
- * \param ASN.1 CAM container (destination)
- */
-void copy(const PathHistory&, BasicVehicleContainerLowFrequency&);
 
 /**
  * Check if difference of two given heading values is within a limit
@@ -103,4 +95,4 @@ void print_indented(std::ostream& os, const asn1::Cam& cam, const std::string& i
 } // namespace facilities
 } // namespace vanetzaExtension
 
-#endif /* CAM_FUNCTIONS_HPP_PUFKBEM8 */
+#endif /* CAM_FUNCTIONS_HPP */
