@@ -21,7 +21,7 @@
 
 #  State changes
 #  - The target name is changed.
-#  - Some source files are added to generate executable target mitvane.
+#  - Some source files are added/removed to generate executable target mitvane.
 #  - Dependent library Vanetza-extension::vanetza-extension is added.
 #  - The name of the target to be installed is changed to mitvane.
 
@@ -38,30 +38,29 @@ endif()
 
 find_package(Threads REQUIRED)
 
+add_subdirectory(decoder)
+add_subdirectory(classifier)
+add_subdirectory(app_layer_parser)
+
 add_executable(mitvane
-    application.cpp
-    cam_application.cpp
-    denm_application.cpp
-    spatem_application.cpp
-    mapem_application.cpp
-    dcc_passthrough.cpp
     ethernet_device.cpp
     link_layer.cpp
     main.cpp
     positioning.cpp
     raw_socket_link.cpp
-    router_context.cpp
-    security.cpp
-    time_trigger.cpp
-    udp_link.cpp
+    idps_context.cpp
 )
 
 target_link_libraries(mitvane
     PUBLIC Boost::system
     Boost::program_options 
     Threads::Threads 
-    Vanetza-extension::vanetza-extension 
-    Vanetza::vanetza)
+    Vanetza-extension::vanetza-extension
+    Vanetza::btp
+    Vanetza::geonet
+    Mitvane::decoder
+    Mitvane::classifier
+    Mitvane::app_layer_parser)
 
 install(TARGETS mitvane EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
