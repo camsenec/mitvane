@@ -31,9 +31,9 @@ if(POLICY CMP0077)
   cmake_policy(SET CMP0077 NEW)
 endif()
 
-# Vanetza makes extensive use of C++11
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_compile_options(-g -Wall)
 
 # Look up threading library (usually pthread)
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
@@ -46,6 +46,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib/static)
 
 include(GNUInstallDirs)
 include(UseVanetzaExtension)
+include(UseMitvane)
 
 # Enable usage of targets' folder property (good for Visual Studio)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -67,10 +68,10 @@ find_package(Vanetza 0.8 REQUIRED)
 
 add_subdirectory(vanetza-extension/asn1)
 add_subdirectory(vanetza-extension/facilities)
-add_subdirectory(src)
+add_subdirectory(mitvane)
 
 if(TARGET Cohda::headers)
-  add_subdirectory(tools/cohda_proxy)
+  add_subdirectory(cohda_proxy)
 endif()
 
 # interface library for convenience
