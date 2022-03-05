@@ -19,8 +19,8 @@
  */
 
 
-#ifndef SPATEM_FUNCTIONS_HPP_PUFKBEM8
-#define SPATEM_FUNCTIONS_HPP_PUFKBEM8
+#ifndef SPATEM_FUNCTIONS_HPP
+#define SPATEM_FUNCTIONS_HPP
 
 
 namespace vanetzaExtension
@@ -47,4 +47,4 @@ void print_indented(std::ostream& os, const asn1::Spatem& spat, const std::strin
 } // namespace facilities
 } // namespace vanetzaExtension
 
-#endif /* SPATEM_FUNCTIONS_HPP_PUFKBEM8 */
+#endif /* SPATEM_FUNCTIONS_HPP */

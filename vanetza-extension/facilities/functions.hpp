@@ -30,8 +30,8 @@
 */
 
 
-#ifndef FUNCTIONS_HPP_PUFKBEM8
-#define FUNCTIONS_HPP_PUFKBEM8
+#ifndef FUNCTIONS_HPP
+#define FUNCTIONS_HPP
 
 #include "vanetza/asn1/its/ReferencePosition.h"
 #include <vanetza/common/position_fix.hpp>
@@ -89,4 +89,4 @@ AltitudeConfidence_t to_altitude_confidence(vanetza::units::Length);
 }; //namespace facilities
 }; //namespace vanetzaExtension
 
-#endif /* FUNCTIONS_HPP_PUFKBEM8 */
+#endif /* FUNCTIONS_HPP */

@@ -19,8 +19,8 @@
  */
 
 
-#ifndef DENM_FUNCTIONS_HPP_PUFKBEM8
-#define DENM_FUNCTIONS_HPP_PUFKBEM8
+#ifndef DENM_FUNCTIONS_HPP
+#define DENM_FUNCTIONS_HPP
 
 
 namespace vanetzaExtension
@@ -47,4 +47,4 @@ void print_indented(std::ostream& os, const asn1::Denm& den, const std::string& 
 } // namespace facilities
 } // namespace vanetzaExtension
 
-#endif /* DENM_FUNCTIONS_HPP_PUFKBEM8 */
+#endif /* DENM_FUNCTIONS_HPP */

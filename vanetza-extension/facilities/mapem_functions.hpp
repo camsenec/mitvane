@@ -19,8 +19,8 @@
  */
 
 
-#ifndef MAPEM_FUNCTIONS_HPP_PUFKBEM8
-#define MAPEM_FUNCTIONS_HPP_PUFKBEM8
+#ifndef MAPEM_FUNCTIONS_HPP
+#define MAPEM_FUNCTIONS_HPP
 
 
 namespace vanetzaExtension
@@ -47,4 +47,4 @@ void print_indented(std::ostream& os, const asn1::Mapem& map, const std::string&
 } // namespace facilities
 } // namespace vanetzaExtension
 
-#endif /* MAPEM_FUNCTIONS_HPP_PUFKBEM8 */
+#endif /* MAPEM_FUNCTIONS_HPP */
