@@ -33,7 +33,7 @@ set(CXX_SOURCES
 )
 
 add_vanetza_extension_component(facilities ${CXX_SOURCES})
-target_link_libraries(facilities PUBLIC Boost::date_time Vanetza-extension::asn1 Vanetza::security)
+target_link_libraries(facilities PUBLIC Boost::date_time Vanetza-extension::asn1)
 target_link_libraries(facilities PRIVATE Vanetza::geonet)
 
 add_test_subdirectory(tests)
