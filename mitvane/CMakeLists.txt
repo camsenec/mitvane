@@ -41,6 +41,7 @@ find_package(Threads REQUIRED)
 add_subdirectory(decoder)
 add_subdirectory(classifier)
 add_subdirectory(app_layer_parser)
+add_subdirectory(rule_reader)
 
 add_executable(mitvane
     ethernet_device.cpp
@@ -60,7 +61,8 @@ target_link_libraries(mitvane
     Vanetza::geonet
     Mitvane::decoder
     Mitvane::classifier
-    Mitvane::app_layer_parser)
+    Mitvane::app_layer_parser
+    Mitvane::rule_reader)
 
 install(TARGETS mitvane EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 

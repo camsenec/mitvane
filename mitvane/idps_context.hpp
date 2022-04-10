@@ -23,6 +23,7 @@
 #define IDPS_CONTEXT_HPP
 
 #include "link_layer.hpp"
+#include "mitvane/rule_reader/rule_reader.hpp"
 #include "mitvane/app_layer_parser/application_parser.hpp"
 #include <vanetza/common/position_provider.hpp>
 #include <vanetza/btp/header.hpp>
@@ -35,8 +36,11 @@
 
 class IdpsContext
 {
+
+typedef std::map<mitvane::Protocol, std::vector<mitvane::Signature>> signatures_type;
+
 public:
-    IdpsContext(const vanetza::geonet::MIB&, vanetza::PositionProvider&);
+    IdpsContext(const vanetza::geonet::MIB&, vanetza::PositionProvider&, signatures_type&);
     ~IdpsContext();
     void set_link_layer(LinkLayer*);
     void set_application_layer_parser(vanetza::btp::port_type port, ApplicationParser* handler);
@@ -53,6 +57,7 @@ private:
     vanetza::geonet::MIB mib_;
     vanetza::PositionProvider& positioning_;
     std::list<ApplicationParser*> app_parsers_;
+    signatures_type& signatures_;
 };
 
 

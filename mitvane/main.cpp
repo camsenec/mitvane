@@ -27,6 +27,7 @@
 #include "mitvane/app_layer_parser/denm_application_parser.hpp"
 #include "mitvane/app_layer_parser/spatem_application_parser.hpp"
 #include "mitvane/app_layer_parser/mapem_application_parser.hpp"
+#include "mitvane/rule_reader/rule_reader.hpp"
 #include <vanetza/common/manual_runtime.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/signal_set.hpp>
@@ -51,6 +52,7 @@ int main(int argc, const char** argv)
         ("interface-src,i", po::value<std::string>()->default_value("lo"), "Network interface for source.")
         ("interface-dest", po::value<std::string>()->default_value("lo"), "Network interface for destination.")
         ("gn-version", po::value<unsigned>()->default_value(1), "GeoNetworking protocol version to use.")
+        ("rule-file", po::value<std::string>()->default_value("rules.yaml"), "Path to a rule file.")
         ("print-rx-all", "Print all received messages")
         ("print-rx-cam", "Print received CAMs")
         ("print-rx-denm", "Print received DENMs")
@@ -117,6 +119,15 @@ int main(int argc, const char** argv)
         asio::signal_set signals(io_service, SIGINT, SIGTERM);
         signals.async_wait(signal_handler);
 
+        std::string rule_filename = vm["rule-file"].as<std::string>();
+        mitvane::RuleReader rule_reader = mitvane::RuleReader(rule_filename);
+        std::map<mitvane::Protocol, std::vector<mitvane::Signature>> signatures;
+        mitvane::RuleReaderStatusCode rule_reader_st = rule_reader.read(signatures);
+        if (rule_reader_st != mitvane::RuleReaderStatusCode::Success) {
+            std::cout << "Num of sigs (GeoNet)" << std::endl;
+            std::cerr << "Failed to read rule file (Error Code: " << static_cast<int>(rule_reader_st) << ")" << "\n";
+        }
+
         gn::MIB mib;
         mib.itsGnLocalGnAddr.is_manually_configured(true);
         mib.itsGnLocalAddrConfMethod = geonet::AddrConfMethod::Managed;
@@ -133,7 +144,7 @@ int main(int argc, const char** argv)
             return 1;
         }
 
-        IdpsContext context(mib, *positioning);
+        IdpsContext context(mib, *positioning, signatures);
         context.set_link_layer(source_link_layer.get());
 
         std::map<std::string, std::unique_ptr<ApplicationParser>> app_parsers;

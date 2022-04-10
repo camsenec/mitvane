@@ -29,8 +29,8 @@
 #include <iostream>
 
 
-IdpsContext::IdpsContext(const vanetza::geonet::MIB& mib, vanetza::PositionProvider& positioning) :
-    mib_(mib), positioning_(positioning) {}
+IdpsContext::IdpsContext(const vanetza::geonet::MIB& mib, vanetza::PositionProvider& positioning, signatures_type& signatures) :
+    mib_(mib), positioning_(positioning), signatures_(signatures) {}
 
 IdpsContext::~IdpsContext()
 {
@@ -70,6 +70,8 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
 
         // 3. Apply application layer parser
         handler->parse(std::unique_ptr<vanetza::PacketVariant>(std::move(detection_context.payload)));
+
+        // 4. Detect using detection_context and signatures
     }
 
 }
