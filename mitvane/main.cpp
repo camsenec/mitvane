@@ -124,7 +124,6 @@ int main(int argc, const char** argv)
         std::map<mitvane::Protocol, std::vector<mitvane::Signature>> signatures;
         mitvane::RuleReaderStatusCode rule_reader_st = rule_reader.read(signatures);
         if (rule_reader_st != mitvane::RuleReaderStatusCode::Success) {
-            std::cout << "Num of sigs (GeoNet)" << std::endl;
             std::cerr << "Failed to read rule file (Error Code: " << static_cast<int>(rule_reader_st) << ")" << "\n";
         }
 
