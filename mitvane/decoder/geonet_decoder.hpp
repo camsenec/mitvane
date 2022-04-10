@@ -61,7 +61,7 @@ class GeonetDecoder
         void pass_up(const vanetza::geonet::DataIndication&, UpPacketPtr);
 
         const vanetza::geonet::MIB& m_mib;
-        DetectionContext &m_detection_context;
+        DetectionContext& m_detection_context;
         
 };
 
