@@ -32,10 +32,10 @@ namespace mitvane {
 
 class Classifier {
     public:
-        typedef std::unordered_map<vanetza::btp::port_type, ApplicationParser*> port_map;
+        typedef std::unordered_map<vanetza::btp::port_type, ApplicationLayerParser*> port_map;
 
         Classifier(DetectionContext&);
-        ApplicationParser* classify(port_map&);
+        ApplicationLayerParser* classify(port_map&);
 
     private:
         DetectionContext& m_detection_context;

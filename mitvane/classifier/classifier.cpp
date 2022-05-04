@@ -33,9 +33,9 @@ namespace mitvane
 Classifier::Classifier(DetectionContext& detection_context) : 
     m_detection_context(detection_context){}
 
-ApplicationParser* Classifier::classify(port_map& app_layer_parsers)
+ApplicationLayerParser* Classifier::classify(port_map& app_layer_parsers)
 {
-    ApplicationParser* handler = nullptr;
+    ApplicationLayerParser* handler = nullptr;
 
     handler = app_layer_parsers[m_detection_context.app_layer_parser_port];
 
