@@ -37,7 +37,7 @@ ApplicationLayerParser* Classifier::classify(port_map& app_layer_parsers)
 {
     ApplicationLayerParser* handler = nullptr;
 
-    handler = app_layer_parsers[m_detection_context.app_layer_parser_port];
+    handler = app_layer_parsers[m_detection_context.btp_data->destination_port];
 
     return handler;
 
