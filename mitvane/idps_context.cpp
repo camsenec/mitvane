@@ -68,13 +68,14 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
         mitvane::GeonetDecoder decoder(mib_, detection_context);
         decoder.decode(std::move(packet_ptr), hdr.source, hdr.destination);
         
-        // 2. Classify and get handler
-        mitvane::Classifier classifier(detection_context);
-        ApplicationLayerParser* parser = classifier.classify(m_app_layer_parsers);
+        if (detection_context.btp_data) {
+             // 2. Classify and get handler
+            mitvane::Classifier classifier(detection_context);
+            ApplicationLayerParser* parser = classifier.classify(m_app_layer_parsers);
 
-        // 3. Apply application layer parser
-        parser->parse(std::unique_ptr<vanetza::PacketVariant>(std::move(detection_context.payload)));
-
+            // 3. Apply application layer parser
+            parser->parse(std::unique_ptr<vanetza::PacketVariant>(std::move(detection_context.payload)));
+        }
         // 4. Detect using detection_context, position and signatures
         mitvane::DetectionReport detection_report; 
         // Geonetworking layer
@@ -88,11 +89,10 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
         mitvane::MessageHandler message_handler;
         mitvane::HandleReport handle_report;
         if (detection_report.result == mitvane::DetectionReport::DetectionResult::Detected){
-            assert(detection_report.sig);
-            handle_report = message_handler.handle(detection_report.sig.get());
+            handle_report = message_handler.handle(detection_report.sigs);
         }
 
-        //5. Forward
+        // 6. Forward
         if (handle_report == mitvane::HandleReport::Allow) {
             // forward
         }
