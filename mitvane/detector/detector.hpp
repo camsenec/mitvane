@@ -37,10 +37,10 @@ struct DetectionReport
         Not_Detected
     };
     DetectionReport() = default;
-    DetectionReport(boost::optional<Signature> sig, DetectionResult result) : 
-        sig{sig}, result{result} {}
+    DetectionReport(std::vector<Signature> sigs, DetectionResult result) : 
+        sigs{sigs}, result{result} {}
 
-    boost::optional<Signature> sig;
+    std::vector<Signature> sigs;
     DetectionResult result;
 };
 
