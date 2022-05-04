@@ -25,7 +25,7 @@
 #include "application_parser.hpp"
 #include "vanetza-extension/asn1/denm.hpp"
 
-class DenmApplicationParser : public ApplicationParser
+class DenmApplicationParser : public ApplicationLayerParser
 {
 public:
     PortType port() override;

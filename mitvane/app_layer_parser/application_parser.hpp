@@ -32,7 +32,7 @@
 #include <vanetza/geonet/data_confirm.hpp>
 #include <vanetza/geonet/router.hpp>
 
-class ApplicationParser
+class ApplicationLayerParser
 {
 public:
     using DataConfirm = vanetza::geonet::DataConfirm;
@@ -43,10 +43,10 @@ public:
     using PromiscuousHook = vanetza::btp::PortDispatcher::PromiscuousHook;
     using UpPacketPtr = vanetza::geonet::Router::UpPacketPtr;
 
-    ApplicationParser() = default;
-    ApplicationParser(const ApplicationParser&) = delete;
-    ApplicationParser& operator=(const ApplicationParser&) = delete;
-    virtual ~ApplicationParser() = default;
+    ApplicationLayerParser() = default;
+    ApplicationLayerParser(const ApplicationLayerParser&) = delete;
+    ApplicationLayerParser& operator=(const ApplicationLayerParser&) = delete;
+    virtual ~ApplicationLayerParser() = default;
     
     virtual PortType port() = 0;
     virtual void parse(UpPacketPtr) = 0;

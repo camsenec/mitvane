@@ -25,7 +25,7 @@
 #include "application_parser.hpp"
 #include "vanetza-extension/asn1/mapem.hpp"
 
-class MapemApplicationParser : public ApplicationParser
+class MapemApplicationParser : public ApplicationLayerParser
 {
 public:
     PortType port() override;

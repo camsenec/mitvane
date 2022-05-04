@@ -25,7 +25,7 @@
 #include "application_parser.hpp"
 #include "vanetza-extension/asn1/spatem.hpp"
 
-class SpatemApplicationParser : public ApplicationParser
+class SpatemApplicationParser : public ApplicationLayerParser
 {
 public:
     PortType port() override;

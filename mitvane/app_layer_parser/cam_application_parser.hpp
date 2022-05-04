@@ -27,7 +27,7 @@
 
 #include "application_parser.hpp"
 
-class CamApplicationParser : public ApplicationParser
+class CamApplicationParser : public ApplicationLayerParser
 {
 public:
     PortType port() override;
