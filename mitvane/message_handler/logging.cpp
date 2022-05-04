@@ -32,11 +32,11 @@ namespace keywords = boost::log::keywords;
 
 void Logging::init_log()
 {
-    logging::add_console_log(std::clog, keywords::format = "%TimeStamp%: %Message%");
+    //logging::add_console_log(std::clog, keywords::format = "%TimeStamp%: %Message%");
 
     logging::add_file_log
     (
-        "sample.log",
+        "detection.log",
         keywords::format = expr::stream
             << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f")
             << " " << expr::message
