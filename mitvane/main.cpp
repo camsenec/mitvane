@@ -146,7 +146,7 @@ int main(int argc, const char** argv)
         IdpsContext context(mib, *positioning, signatures);
         context.set_link_layer(source_link_layer.get());
 
-        std::map<std::string, std::unique_ptr<ApplicationParser>> app_parsers;
+        std::map<std::string, std::unique_ptr<ApplicationLayerParser>> app_parsers;
         for (const std::string& app_name : vm["app-parsers"].as<std::vector<std::string>>()) {
             if (app_parsers.find(app_name) != app_parsers.end()) {
                 std::cerr << "application '" << app_name << "' requested multiple times, skip\n";
