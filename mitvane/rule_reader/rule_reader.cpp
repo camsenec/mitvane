@@ -172,6 +172,7 @@ RuleReaderStatusCode RuleReader::read(std::map<Protocol, std::vector<Signature>>
         if (ret != MetaReaderStatusCode::Success) {
             return RuleReaderStatusCode::Bad_MetaData;
         }
+        sig.meta = meta;
         
 
         PatternReader pattern_reader = PatternReader();
@@ -179,7 +180,7 @@ RuleReaderStatusCode RuleReader::read(std::map<Protocol, std::vector<Signature>>
         switch (protocol) {
             case Protocol::GeoNetworking:
             {
-                pattern_st = pattern_reader.read_geonet_pattern(rules, sig); 
+                pattern_st = pattern_reader.read_geonet_pattern(rules[i], sig); 
                 if (pattern_st != PatternReaderStatusCode::Success){
                     return RuleReaderStatusCode::Bad_Pattern;
                 }
@@ -196,7 +197,7 @@ RuleReaderStatusCode RuleReader::read(std::map<Protocol, std::vector<Signature>>
             }
             case Protocol::Facility:
             {
-                pattern_st = pattern_reader.read_facility_pattern(rules, sig);
+                pattern_st = pattern_reader.read_facility_pattern(rules[i], sig);
                 if (pattern_st != PatternReaderStatusCode::Success){
                     return RuleReaderStatusCode::Bad_Pattern;
                 }

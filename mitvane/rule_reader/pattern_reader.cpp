@@ -103,7 +103,7 @@ PatternReaderStatusCode PatternReader::read_geonet_pattern(YAML::Node rules, Sig
 
             } 
             else if (key == "allowed_so_range") 
-            {
+            {   
                 geonet_allowed_so_range geo_allowed_so_range;
                 YAML::Node allowed_so_range_node = rules[key];
                 if (!allowed_so_range_node.IsMap()) 
@@ -132,27 +132,27 @@ PatternReaderStatusCode PatternReader::read_geonet_pattern(YAML::Node rules, Sig
                 }
                 geo_allowed_so_range.shape = Allowed_So_Range_Shape::Circle;
 
-                YAML::Node distance_a_node = allowed_so_range_node["destination_a"];
+                YAML::Node distance_a_node = allowed_so_range_node["distance_a"];
                 if (!distance_a_node.IsDefined()) 
                 {
-                    std::cerr << "Destination a is required for allowed_so_range" << "\n";
+                    std::cerr << "Distance a is required for allowed_so_range" << "\n";
                     return PatternReaderStatusCode::Error;
                 }
                 if (!distance_a_node.IsScalar()) 
                 {
-                    std::cerr << "Bad destination a for allowed_so_range" << "\n";
+                    std::cerr << "Bad distance a for allowed_so_range" << "\n";
                     return PatternReaderStatusCode::Error;
                 }
 
-                YAML::Node distance_b_node = allowed_so_range_node["destination_b"];
+                YAML::Node distance_b_node = allowed_so_range_node["distance_b"];
                 if (!distance_b_node.IsDefined()) 
                 {
-                    std::cerr << "Destination b is required for allowed_so_range" << "\n";
+                    std::cerr << "Distance b is required for allowed_so_range" << "\n";
                     return PatternReaderStatusCode::Error;
                 }
                 if (!distance_b_node.IsScalar()) 
                 {
-                    std::cerr << "Bad destination b for allowed_so_range" << "\n";
+                    std::cerr << "Bad distance b for allowed_so_range" << "\n";
                     return PatternReaderStatusCode::Error;
                 }
 

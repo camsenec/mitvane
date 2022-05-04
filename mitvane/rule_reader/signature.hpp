@@ -48,7 +48,8 @@ enum class Protocol
     NotSupported_Protocol
 };
 
-enum class Allowed_So_Range_Shape {
+enum class Allowed_So_Range_Shape
+{
     Circle
 };
 
