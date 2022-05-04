@@ -35,7 +35,7 @@ class DetectionContext {
     public:
         
         GeonetData geonet_data;
-        BtpData btp_data;
+        boost::optional<BtpData> btp_data;
         //boost::optional<CamData> cam_data;
 
         vanetza::btp::port_type app_layer_parser_port;
