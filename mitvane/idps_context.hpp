@@ -23,6 +23,7 @@
 #define IDPS_CONTEXT_HPP
 
 #include "link_layer.hpp"
+#include "raw_socket_link.hpp"
 #include "mitvane/rule_reader/rule_reader.hpp"
 #include "mitvane/app_layer_parser/application_parser.hpp"
 #include <vanetza/common/position_provider.hpp>
@@ -33,19 +34,18 @@
 #include <memory>
 
 
+typedef std::map<mitvane::Protocol, std::vector<mitvane::Signature>> signatures_type;
 
 class IdpsContext
 {
-
-typedef std::map<mitvane::Protocol, std::vector<mitvane::Signature>> signatures_type;
 
 public:
     IdpsContext(const vanetza::geonet::MIB&, vanetza::PositionProvider&, signatures_type&);
     ~IdpsContext();
     void set_link_layer(LinkLayer*);
-    void set_application_layer_parser(vanetza::btp::port_type port, ApplicationParser* handler);
-    void enable(ApplicationParser*);
-    void disable(ApplicationParser*);
+    void set_application_layer_parser(vanetza::btp::port_type port, ApplicationLayerParser* handler);
+    void enable(ApplicationLayerParser*);
+    void disable(ApplicationLayerParser*);
 
 private:
     void run(vanetza::CohesivePacket&&, const vanetza::EthernetHeader&);
@@ -53,11 +53,13 @@ private:
     void update_position_vector();
     void update_packet_flow(const vanetza::geonet::LongPositionVector&);
 
-    std::unordered_map<vanetza::btp::port_type, ApplicationParser*> m_app_layer_parsers;
+    std::unordered_map<vanetza::btp::port_type, ApplicationLayerParser*> m_app_layer_parsers;
     vanetza::geonet::MIB mib_;
     vanetza::PositionProvider& positioning_;
-    std::list<ApplicationParser*> app_parsers_;
+    std::list<ApplicationLayerParser*> app_parsers_;
     signatures_type& signatures_;
+    std::unique_ptr<RawSocketLink> destination_link_;
+    
 };
 
 
