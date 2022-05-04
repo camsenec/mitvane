@@ -27,6 +27,8 @@
 #include <vanetza/geonet/destination_variant.hpp>
 #include <vanetza/geonet/interface.hpp>
 #include <vanetza/geonet/position_vector.hpp>
+#include <vanetza/geonet/basic_header.hpp>
+#include <vanetza/geonet/header_type.hpp>
 #include <vanetza/security/decap_confirm.hpp>
 #include <boost/optional.hpp>
 
@@ -42,8 +44,9 @@ enum class SecurityInfo {
 struct GeonetData
 {   
     unsigned int protocol_version;
-    vanetza::geonet::TransportType header_type;
-    vanetza::geonet::DestinationVariant destination;
+    vanetza::geonet::NextHeaderBasic next_header;
+    vanetza::geonet::HeaderType header_type;
+    boost::optional<vanetza::geonet::DestinationVariant> destination;
     vanetza::geonet::ShortPositionVector source_position;
     SecurityInfo security_info;
     boost::optional<vanetza::security::HashedId8> certificate_id;
@@ -52,7 +55,8 @@ struct GeonetData
     boost::optional<vanetza::security::SignerInfoType> signer_info_type;
     boost::optional<unsigned int> chain_size;
     vanetza::geonet::Lifetime remaining_packet_lifetime;
-    unsigned remaining_hop_limit;
+    uint8_t maximum_hop_limit;
+    uint8_t remaining_hop_limit;
 };
 
 } // namespace mitvane

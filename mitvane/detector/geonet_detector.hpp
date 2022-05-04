@@ -22,20 +22,30 @@
 #ifndef GEONET_DETECTOR_HPP
 #define GEONET_DETECTOR_HPP
 
+#include "mitvane/idps_context.hpp"
 #include "detector.hpp"
 #include "geonet_data.hpp"
 
 namespace mitvane 
 {
 
-class GeonetDetector : public Detector 
+enum class TransformStatusCode {
+    Success,
+    Error
+};
+
+class GeonetDetector : public Detector
 {    
     
     public:
-        void detect() const override;
+        GeonetDetector (GeonetData& data, vanetza::PositionProvider& positioning);
+        DetectionReport detect(signatures_type &signatures) override;
 
     private:
-        GeonetData& data; 
+        TransformStatusCode transform_nh(std::string nh_str, vanetza::geonet::NextHeaderBasic &nh);
+        TransformStatusCode transform_ht(std::string ht_str, uint8_t &ht);
+        GeonetData& m_data; 
+        vanetza::PositionProvider& m_positioning;
 };
 
 
