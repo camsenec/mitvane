@@ -42,6 +42,8 @@ add_subdirectory(decoder)
 add_subdirectory(classifier)
 add_subdirectory(app_layer_parser)
 add_subdirectory(rule_reader)
+add_subdirectory(detector)
+add_subdirectory(message_handler)
 
 add_executable(mitvane
     ethernet_device.cpp
@@ -54,7 +56,9 @@ add_executable(mitvane
 
 target_link_libraries(mitvane
     PUBLIC Boost::system
-    Boost::program_options 
+    Boost::program_options
+    Boost::log_setup
+    Boost::log
     Threads::Threads 
     Vanetza-extension::vanetza-extension
     Vanetza::btp
@@ -62,7 +66,9 @@ target_link_libraries(mitvane
     Mitvane::decoder
     Mitvane::classifier
     Mitvane::app_layer_parser
-    Mitvane::rule_reader)
+    Mitvane::rule_reader
+    Mitvane::detector
+    Mitvane::message_handler)
 
 install(TARGETS mitvane EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
