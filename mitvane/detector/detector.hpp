@@ -22,15 +22,32 @@
 #ifndef DETECTOR_HPP
 #define DETECTOR_HPP
 
+#include "mitvane/rule_reader/signature.hpp"
+#include "mitvane/idps_context.hpp"
+#include "boost/optional/optional.hpp"
+
 namespace mitvane 
 {
+
+struct DetectionReport 
+{
+    enum class DetectionResult
+    {
+        Detected,
+        Not_Detected
+    };
+    DetectionReport() = default;
+    DetectionReport(boost::optional<Signature> sig, DetectionResult result) : 
+        sig{sig}, result{result} {}
+
+    boost::optional<Signature> sig;
+    DetectionResult result;
+};
 
 class Detector
 {   
     public:
-        virtual void detect() const;
-        virtual ~Detector() = default;
-        
+        virtual DetectionReport detect(signatures_type &signatures) = 0;
 };
 
 
