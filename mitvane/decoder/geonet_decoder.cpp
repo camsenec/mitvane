@@ -134,6 +134,8 @@ void GeonetDecoder::decode_basic(IndicationContextBasic& ctx)
         // Store RHL (Remaining Hop Limit)
         m_detection_context.geonet_data.remaining_hop_limit = basic->hop_limit;
 
+        m_detection_context.geonet_data.next_header = basic->next_header;
+
         if (basic->next_header == NextHeaderBasic::Secured) {
             m_detection_context.geonet_data.security_info = SecurityInfo::Signed;
             decode_secured(ctx, *basic);
@@ -154,6 +156,8 @@ void GeonetDecoder::decode_common(IndicationContext& ctx, const BasicHeader& bas
     } else {
         DataIndication& indication = ctx.service_primitive();
         indication.traffic_class = common->traffic_class;
+        m_detection_context.geonet_data.header_type = common->header_type;
+        m_detection_context.geonet_data.maximum_hop_limit = common->maximum_hop_limit;
         switch (common->next_header)
         {
             case NextHeaderCommon::BTP_A:
@@ -228,8 +232,6 @@ void GeonetDecoder::decode_extended(IndicationContext& ctx, const CommonHeader& 
             indication.transport_type = TransportType::SHB;
             indication.source_position = static_cast<ShortPositionVector>(shb.source_position);
             
-            // Store Header Type
-            m_detection_context.geonet_data.header_type = TransportType::SHB;
             // Store Source Position Vector
             m_detection_context.geonet_data.source_position = static_cast<ShortPositionVector>(shb.source_position);
         }
@@ -241,8 +243,6 @@ void GeonetDecoder::decode_extended(IndicationContext& ctx, const CommonHeader& 
             indication.source_position = static_cast<ShortPositionVector>(gbc.source_position);
             indication.destination = gbc.destination(m_context.pdu().common().header_type);
             
-            // Store Header Type
-            m_detection_context.geonet_data.header_type = TransportType::GBC;
             // Store Source Position Vector
             m_detection_context.geonet_data.source_position = static_cast<ShortPositionVector>(gbc.source_position);
             // Store destination
