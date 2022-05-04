@@ -41,7 +41,6 @@ class BtpDecoder
         void decode(const vanetza::geonet::DataIndication&, std::unique_ptr<vanetza::UpPacket>);
 
     private:
-        BtpData m_data;
         DetectionContext& m_detection_context;
 };
 

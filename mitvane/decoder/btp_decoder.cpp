@@ -32,48 +32,45 @@ namespace mitvane {
 BtpDecoder::BtpDecoder(DetectionContext& detection_context) : 
     m_detection_context(detection_context){}
     
-boost::optional<DataIndication> parse_btp_header(const geonet::DataIndication& gn_ind, PacketVariant& packet, DetectionContext& detection_context)
+void parse_btp_header(const geonet::DataIndication& gn_ind, PacketVariant& packet, DetectionContext& detection_context)
 {
-    boost::optional<DataIndication> indication;
-
     switch (gn_ind.upper_protocol) {
         case geonet::UpperProtocol::BTP_A: {
-            HeaderA hdr = parse_btp_a(packet);
-            indication = DataIndication(gn_ind, hdr);
+            detection_context.btp_data = BtpData();
             
+            HeaderA hdr = parse_btp_a(packet);
             // Store btp type
-            detection_context.btp_data.btp_type = geonet::UpperProtocol::BTP_A;
+            detection_context.btp_data->btp_type = geonet::UpperProtocol::BTP_A;
             // Store source port
-            detection_context.btp_data.source_port = hdr.source_port;
+            detection_context.btp_data->source_port = hdr.source_port;
             // Store destination port
-            detection_context.btp_data.destination_port = hdr.destination_port;
+            detection_context.btp_data->destination_port = hdr.destination_port;
             }
             break;
         case geonet::UpperProtocol::BTP_B: {
+            detection_context.btp_data = BtpData();
+             
             HeaderB hdr = parse_btp_b(packet);
-            indication = DataIndication(gn_ind, hdr);
-
             // Store btp type
-            detection_context.btp_data.btp_type = geonet::UpperProtocol::BTP_B; 
+            detection_context.btp_data->btp_type = geonet::UpperProtocol::BTP_B; 
             // Store destination port
-            detection_context.btp_data.destination_port = hdr.destination_port;
+            detection_context.btp_data->destination_port = hdr.destination_port;
             // Store destination port info
-            detection_context.btp_data.destination_port_info = hdr.destination_port_info;
+            detection_context.btp_data->destination_port_info = hdr.destination_port_info;
             }
             break;
         default:
             break;
     }
 
-    return indication;
+    return;
 }
 
 
 void BtpDecoder::decode(const vanetza::geonet::DataIndication& gn_ind, std::unique_ptr<UpPacket> packet)
 {
     assert(packet);
-    boost::optional<DataIndication> btp_ind = parse_btp_header(gn_ind, *packet, m_detection_context);
-    m_detection_context.app_layer_parser_port = btp_ind->destination_port;
+    parse_btp_header(gn_ind, *packet, m_detection_context);
     packet.release();
 }
 } // namespace mitvane
