@@ -123,6 +123,14 @@ PatternReaderStatusCode PatternReader::read_geonet_pattern(YAML::Node rules, Sig
                     std::cerr << "Bad shape for allowed_so_range" << "\n";
                     return PatternReaderStatusCode::Error;
                 }
+                
+                std::string shape = shape_node.as<std::string>();
+                transform(shape.begin(), shape.end(), shape.begin(), ::tolower);
+                if (shape != "circle") {
+                    std::cerr << "Shapes except for circle as allowed_so_range's shape is currently not supported" << "\n";
+                    return PatternReaderStatusCode::Error;
+                }
+                geo_allowed_so_range.shape = Allowed_So_Range_Shape::Circle;
 
                 YAML::Node distance_a_node = allowed_so_range_node["destination_a"];
                 if (!distance_a_node.IsDefined()) 
@@ -182,7 +190,7 @@ PatternReaderStatusCode PatternReader::read_facility_pattern(YAML::Node rules, S
                     return PatternReaderStatusCode::Error;
                 }
 
-                for (int i = 0; i < (int)allowed_ids_node.size(); ++i) 
+                for (int i = 0; i < allowed_ids_node.size(); ++i) 
                 {
                     int id = allowed_ids_node[i].as<int>();
                     allowed_ids.emplace_back(id);

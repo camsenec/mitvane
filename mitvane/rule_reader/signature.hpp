@@ -48,10 +48,13 @@ enum class Protocol
     NotSupported_Protocol
 };
 
+enum class Allowed_So_Range_Shape {
+    Circle
+};
+
 struct MetaData 
 {
-    std::string msg;
-    uint32_t sid;
+    std::string msg; uint32_t sid;
     uint16_t rev;
 
 };
@@ -67,9 +70,9 @@ struct geonet_destination_area
 
 struct geonet_allowed_so_range 
 {
-    std::string shape;
+    Allowed_So_Range_Shape shape;
     int distance_a;
-    int distance_b; 
+    int distance_b;
 };
 
 typedef std::vector<uint32_t> facility_ids_type;
