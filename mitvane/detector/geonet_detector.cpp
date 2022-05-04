@@ -75,23 +75,26 @@ TransformStatusCode GeonetDetector::transform_ht(std::string ht_str, uint8_t &ht
         ht = static_cast<uint8_t>(HeaderType::TSB_Single_Hop);
         return TransformStatusCode::Success;
     } else if (ht_str == "GBC") {
-        ht = static_cast<uint8_t>(HeaderType::GeoAnycast_Circle) | 
-            static_cast<uint8_t>(HeaderType::GeoAnycast_Rect) | 
-            static_cast<uint8_t>(HeaderType::GeoAnycast_Elip);
+        ht = static_cast<uint8_t>(HeaderType::GeoBroadcast_Circle) | 
+            static_cast<uint8_t>(HeaderType::GeoBroadcast_Rect) | 
+            static_cast<uint8_t>(HeaderType::GeoBroadcast_Elip);
         return TransformStatusCode::Success;
     } else {
         return TransformStatusCode::Error;
     }
 }
 
+// return DetectionReport{sig, DetectionReport::DetectionResult::Detected};
 DetectionReport GeonetDetector::detect(signatures_type &signatures)
 {
     std::vector<mitvane::Signature> geonet_signatures = signatures[Protocol::GeoNetworking];
+    std::vector<Signature> matched_sigs;
     TransformStatusCode ret;
-
+    
     for (auto sig_it = geonet_signatures.begin(); sig_it != geonet_signatures.end(); ++sig_it) {
         mitvane::Signature sig = *sig_it;
-        
+        int detection_count = 0;
+
         if (sig.patterns.count("nh")) {
             NextHeaderBasic nh;
             ret = transform_nh(boost::get<std::string>(sig.patterns["nh"]), nh);
@@ -99,8 +102,9 @@ DetectionReport GeonetDetector::detect(signatures_type &signatures)
                 std::cerr << "[sid: " << sig.meta.sid << "] " << "Detection skipped: Invalid next header" << "\n";
                 continue;
             }
-            if (nh != m_data.next_header) {
-                return DetectionReport{sig, DetectionReport::DetectionResult::Detected};
+            if (nh == m_data.next_header) {
+                std::cout << "[sid: " << sig.meta.sid << "] nh detected" << std::endl;
+                ++detection_count;
             }
         }
         if (sig.patterns.count("ht")){
@@ -110,22 +114,25 @@ DetectionReport GeonetDetector::detect(signatures_type &signatures)
                 std::cerr << "[sid: " << sig.meta.sid << "] " << "Detection skipped: Invalid header type" << "\n";
                 continue;
             }
-            if (!(ht & static_cast<uint8_t>(m_data.header_type))) {
-                return DetectionReport{sig, DetectionReport::DetectionResult::Detected};
+            // detect by 4 bits from the head
+            if ((ht >> 4) == (static_cast<uint8_t>(m_data.header_type) >> 4)) {
+                std::cout << "[sid: " << sig.meta.sid << "] ht detected" << std::endl;
+                ++detection_count;
             }
         }
         if (sig.patterns.count("mhl")){
             if(boost::get<int>(sig.patterns["mhl"]) <= m_data.maximum_hop_limit) {
-                return DetectionReport{sig, DetectionReport::DetectionResult::Detected};
+                std::cout << "[sid: " << sig.meta.sid << "] mhl detected" << std::endl;
+                ++detection_count;
             }
         }
 
         if (sig.patterns.count("allowed_so_range")) {
             geonet_allowed_so_range allowed_so_range = boost::get<geonet_allowed_so_range>(sig.patterns["allowed_so_range"]);
             vanetza::units::Length limit_a 
-                = boost::get<geonet_destination_area>(sig.patterns["allowed_so_range"]).distance_a * boost::units::si::meters;
+                = allowed_so_range.distance_a * boost::units::si::meters;
             vanetza::units::Length limit_b
-                = boost::get<geonet_destination_area>(sig.patterns["allowed_so_range"]).distance_b * boost::units::si::meters;
+                = allowed_so_range.distance_b * boost::units::si::meters;
             if (allowed_so_range.shape == Allowed_So_Range_Shape::Circle) {
                 vanetza::security::TwoDLocation range_center 
                     = vanetza::security::TwoDLocation(m_positioning.position_fix().latitude, m_positioning.position_fix().longitude);
@@ -137,7 +144,8 @@ DetectionReport GeonetDetector::detect(signatures_type &signatures)
                     = vanetza::security::TwoDLocation(source_latitude, source_longitude);
 
                 if (!vanetza::security::is_within(source_position, allowed_range_circle)) {
-                    return DetectionReport{sig, DetectionReport::DetectionResult::Detected};
+                    std::cout << "[sid: " << sig.meta.sid << "] allowed_so_range detected" << std::endl;
+                    ++detection_count;
                 }
 
             } else {
@@ -183,8 +191,12 @@ DetectionReport GeonetDetector::detect(signatures_type &signatures)
             }
         }
         */
+
+       if (detection_count == sig.patterns.size()){
+           matched_sigs.emplace_back(sig);
+       }
     }
-    return DetectionReport{boost::optional<Signature>(), DetectionReport::DetectionResult::Detected};
+    return DetectionReport{matched_sigs, DetectionReport::DetectionResult::Detected};
 }
 
 
