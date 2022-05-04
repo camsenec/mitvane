@@ -36,7 +36,7 @@ class MessageHandler
 {   
     public:
         MessageHandler();
-        HandleReport handle(Signature& signature);
+        HandleReport handle(std::vector<Signature>& sigs);
     private:
         boost::log::sources::logger lg;
 };

@@ -42,7 +42,7 @@ std::string action_to_string(Action& action){
 
 std::string protocol_to_string(Protocol& protocol){
     if (protocol == Protocol::GeoNetworking) {
-        return "GeoNetworking)";
+        return "GeoNetworking";
     } else if (protocol == Protocol::BTP) {
         return "BTP";
     } else if (protocol == Protocol::Facility) {
@@ -61,28 +61,31 @@ std::string protocol_to_string(Protocol& protocol){
 }
 
 std::string sid_rev_to_string(MetaData& meta) {
-    return "[" + std::to_string(meta.sid) + ":" + std::to_string(meta.rev) + "]";
+    return "[" + std::to_string(meta.sid) + ":" + std::to_string(meta.rev) + "] ";
 }
 
 
 std::string format_log(Signature& signature) {
     return sid_rev_to_string(signature.meta) + 
         signature.meta.msg + 
-        action_to_string(signature.action) + 
+        + " " + action_to_string(signature.action) + " " + 
         "{" + protocol_to_string(signature.protocol) + "}"; 
 }
 
-HandleReport MessageHandler::handle(Signature& signature) {
-    if (signature.action == Action::Alert) {
-        BOOST_LOG(lg) << format_log(signature);
-        return HandleReport::Allow;
-    } else if (signature.action == Action::Drop) {
-        BOOST_LOG(lg) << format_log(signature);
-        return HandleReport::Drop;
-    } else {
-        BOOST_LOG(lg) << "Unknown action. No log output.";
-        return HandleReport::Drop;
+HandleReport MessageHandler::handle(std::vector<Signature>& sigs) {
+    HandleReport rep = HandleReport::Allow;
+    for (auto sig = sigs.begin(); sig != sigs.end(); ++sig) {
+        if (sig->action == Action::Alert) {
+            BOOST_LOG(lg) << format_log(*sig);
+        } else if (sig->action == Action::Drop) {
+            BOOST_LOG(lg) << format_log(*sig);
+            rep = HandleReport::Drop;
+        } else {
+            BOOST_LOG(lg) << "Unknown action. No log output.";
+            rep = HandleReport::Drop;
+        }
     }
+    return rep;
 }
 
 } // namespace mitvane
