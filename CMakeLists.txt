@@ -54,7 +54,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Find project dependencies
 find_package(Cohda MODULE QUIET)
 
-set(Boost_COMPONENTS date_time) # used by VanetzaConfig generator
+set(Boost_COMPONENTS date_time log log_setup) # used by VanetzaConfig generator
 find_package(Boost 1.58 REQUIRED COMPONENTS ${Boost_COMPONENTS})
 # query optional Boost components one by one quietly
 foreach(component IN ITEMS program_options system)
