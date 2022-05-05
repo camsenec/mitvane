@@ -49,8 +49,8 @@ int main(int argc, const char** argv)
     options.add_options()
         ("help", "Print out available options.")
         ("link-layer,l", po::value<std::string>()->default_value("ethernet"), "Link layer type")
-        ("interface-src,i", po::value<std::string>()->default_value("lo"), "Network interface for source.")
-        ("interface-dest", po::value<std::string>()->default_value("lo"), "Network interface for destination.")
+        ("interface-src,s", po::value<std::string>()->default_value("lo"), "Network interface for source.")
+        ("interface-dest,d", po::value<std::string>()->default_value("lo"), "Network interface for destination.")
         ("gn-version", po::value<unsigned>()->default_value(1), "GeoNetworking protocol version to use.")
         ("rule-file", po::value<std::string>()->default_value("rules.yaml"), "Path to a rule file.")
         ("print-rx-all", "Print all received messages")
@@ -91,7 +91,8 @@ int main(int argc, const char** argv)
         vanetza::ManualRuntime runtime(Clock::at(posix_time::microsec_clock::universal_time()));
         
         const std::string link_layer_name = vm["link-layer"].as<std::string>();
-
+        
+        // Create source link 
         const char* src_device_name = vm["interface-src"].as<std::string>().c_str();
         EthernetDevice src_device(src_device_name);
         
@@ -100,15 +101,15 @@ int main(int argc, const char** argv)
             std::cerr << "No link layer for source'" << link_layer_name << "' found." << std::endl;
             return 1;
         }
-        
+
+        // Create destination link 
         const char* dest_device_name = vm["interface-dest"].as<std::string>().c_str();
         EthernetDevice dest_device(dest_device_name);
         
-        auto dst_link_layer =  create_link_layer(io_service, dest_device, link_layer_name);
-        if (!source_link_layer) {
-            std::cerr << "No link layer for source'" << link_layer_name << "' found." << std::endl;
-            return 1;
-        }
+        boost::asio::generic::raw_protocol raw_protocol(AF_PACKET, vanetza::access::ethertype::GeoNetworking.net());
+        boost::asio::generic::raw_protocol::socket raw_socket(io_service, raw_protocol);
+        raw_socket.bind(dest_device.endpoint(AF_PACKET));
+        std::unique_ptr<RawSocketLink> dest_link_layer { new RawSocketLink{std::move(raw_socket)} };
 
         auto signal_handler = [&io_service](const boost::system::error_code& ec, int signal_number) {
             if (!ec) {
@@ -143,7 +144,7 @@ int main(int argc, const char** argv)
             return 1;
         }
 
-        IdpsContext context(mib, *positioning, signatures);
+        IdpsContext context(mib, *positioning, signatures, dest_link_layer.get());
         context.set_link_layer(source_link_layer.get());
 
         std::map<std::string, std::unique_ptr<ApplicationLayerParser>> app_parsers;

@@ -54,6 +54,12 @@ std::size_t RawSocketLink::transmit(std::unique_ptr<ChunkPacket> packet)
     return socket_.send(const_buffers);
 }
 
+std::size_t RawSocketLink::transmit(vanetza::CohesivePacket&& packet)
+{
+    boost::asio::const_buffer const_buffer{ boost::asio::buffer(packet.buffer()) };
+    return socket_.send(const_buffer);
+}
+
 void RawSocketLink::indicate(IndicationCallback callback)
 {
     callback_ = callback;
