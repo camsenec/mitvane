@@ -30,11 +30,13 @@
 #include "mitvane/rule_reader/signature.hpp"
 #include "mitvane/message_handler/message_handler.hpp"
 #include <vanetza/common/byte_order.hpp>
+#include <vanetza/net/ethernet_header.hpp>
+#include <vanetza/access/data_request.hpp>
 #include <iostream>
 
 
-IdpsContext::IdpsContext(const vanetza::geonet::MIB& mib, vanetza::PositionProvider& positioning, signatures_type& signatures) :
-    mib_(mib), positioning_(positioning), signatures_(signatures) {}
+IdpsContext::IdpsContext(const vanetza::geonet::MIB& mib, vanetza::PositionProvider& positioning, signatures_type& signatures, RawSocketLink* destination_link) :
+    mib_(mib), positioning_(positioning), signatures_(signatures), destination_link_(destination_link){}
 
 IdpsContext::~IdpsContext()
 {
@@ -93,12 +95,9 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
         }
 
         // 6. Forward
-        if (handle_report == mitvane::HandleReport::Allow) {
-            // forward
+        if (handle_report != mitvane::HandleReport::Drop) {
+            destination_link_->transmit(std::move(packet));
         }
-
-
-        
         
     }
 

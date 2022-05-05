@@ -40,7 +40,7 @@ class IdpsContext
 {
 
 public:
-    IdpsContext(const vanetza::geonet::MIB&, vanetza::PositionProvider&, signatures_type&);
+    IdpsContext(const vanetza::geonet::MIB&, vanetza::PositionProvider&, signatures_type&, RawSocketLink*);
     ~IdpsContext();
     void set_link_layer(LinkLayer*);
     void set_application_layer_parser(vanetza::btp::port_type port, ApplicationLayerParser* handler);
@@ -58,7 +58,7 @@ private:
     vanetza::PositionProvider& positioning_;
     std::list<ApplicationLayerParser*> app_parsers_;
     signatures_type& signatures_;
-    std::unique_ptr<RawSocketLink> destination_link_;
+    RawSocketLink* destination_link_;
     
 };
 
