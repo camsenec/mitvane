@@ -18,7 +18,7 @@
 
 
 cmake_minimum_required(VERSION 3.1)
-project(Mitvane VERSION 0.8)
+project(Mitvane VERSION 0.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # enable convenient CMake policies if available
@@ -31,7 +31,7 @@ if(POLICY CMP0077)
   cmake_policy(SET CMP0077 NEW)
 endif()
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-g -Wall -Wno-sign-compare)
 
@@ -53,6 +53,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Find project dependencies
 find_package(Cohda MODULE QUIET)
+find_package(OpenSSL QUIET)
+find_package(Vanetza 0.8 REQUIRED)
 
 set(Boost_COMPONENTS date_time log log_setup) # used by VanetzaConfig generator
 find_package(Boost 1.58 REQUIRED COMPONENTS ${Boost_COMPONENTS})
@@ -63,8 +65,6 @@ foreach(component IN ITEMS program_options system)
     list(APPEND Boost_COMPONENTS ${component})
   endif()
 endforeach()
-
-find_package(Vanetza 0.8 REQUIRED)
 
 add_subdirectory(vanetza-extension/asn1)
 add_subdirectory(vanetza-extension/facilities)
