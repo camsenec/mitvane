@@ -1,0 +1,62 @@
+---
+# action: "drop", "alert"
+# protocol: "GeoNetworking", "BTP", "Facility", "CA", "DEN", "RLT", "TLM"
+
+rules:
+  # Rule for FR1
+  - action: "drop"
+    protocol: "GeoNetworking"
+    meta: 
+      msg: "Unauthorized message is detected."
+      sid: 1
+      rev: 1
+    nh: "common"
+  
+  # Rule for FR2 (maximum hop limit)
+  - action: "drop"
+    protocol: "GeoNetworking"
+    meta: 
+      msg: "GBC with large max hop limit is detected."
+      sid: 2
+      rev: 1
+    ht: "GBC"
+    mhl: 3
+
+  # Rule for FR2 (destination area)
+  - action: "drop"
+    protocol: "GeoNetworking"
+    meta: 
+      msg: "GBC from a source far from the ego-vehicle is detected"
+      sid: 3
+      rev: 1
+    ht: "GBC"
+    allowed_so_range:
+      shape: "circle"
+      distance_a: 100
+      distance_b: 100
+  
+  # Rule for FR3 (Identity based)
+  - action: "drop"
+    protocol: "facility"
+    meta: 
+      msg: "A packet from not trusted ITS-S is detected. (Identity based)"
+      sid: 4
+      rev: 1
+    allowed_ids:
+      - 123490
+      - 123491
+      - 123492
+  
+  # Rule for FR3 (Area based)
+  - action: "drop"
+    protocol: "GeoNetworking"
+    meta: 
+      msg: "A packet from not trusted ITS-S is detected. (Area based)"
+      sid: 5 
+      rev: 1
+    allowed_so_range:
+      shape: "circle"
+      distance_a: 100
+      distance_b: 100
+
+
