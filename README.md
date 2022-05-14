@@ -60,6 +60,7 @@ Detection rules can be written by YAML. Here is an example to drop packet coming
       distance_a: 100
       distance_b: 100
 ```
+An example detection file is available at https://github.com/camsenec/mitvane/tree/master/example_rule.
 
 ### action
 The `action` determines what happens when the rule matches. The supported actions are 
