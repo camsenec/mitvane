@@ -3,7 +3,6 @@
 # protocol: "GeoNetworking", "BTP", "Facility", "CA", "DEN", "RLT", "TLM"
 
 rules:
-  # Rule for FR1
   - action: "drop"
     protocol: "GeoNetworking"
     meta: 
@@ -12,7 +11,6 @@ rules:
       rev: 1
     nh: "common"
   
-  # Rule for FR2 (maximum hop limit)
   - action: "drop"
     protocol: "GeoNetworking"
     meta: 
@@ -22,7 +20,6 @@ rules:
     ht: "GBC"
     mhl: 3
 
-  # Rule for FR2 (destination area)
   - action: "drop"
     protocol: "GeoNetworking"
     meta: 
@@ -35,7 +32,6 @@ rules:
       distance_a: 100
       distance_b: 100
   
-  # Rule for FR3 (Identity based)
   - action: "drop"
     protocol: "facility"
     meta: 
@@ -47,7 +43,6 @@ rules:
       - 123491
       - 123492
   
-  # Rule for FR3 (Area based)
   - action: "drop"
     protocol: "GeoNetworking"
     meta: 
