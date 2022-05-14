@@ -58,7 +58,6 @@ int main(int argc, const char** argv)
         ("print-rx-denm", "Print received DENMs")
         ("print-rx-spat", "Print received SPATEMs")
         ("print-rx-map", "Print received MAPEMs")
-        ("benchmark", "Enable benchmarking")
         ("app-parsers,a", po::value<std::vector<std::string>>()->default_value({"ca", "den", "spat", "map"}, "ca den spat map")->multitoken(), "Run applications [ca,den,spat,map]")
     ;
     add_positioning_options(options);
