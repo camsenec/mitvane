@@ -44,7 +44,7 @@ Allowed options:
 ## Architecture and deployment
 Mitvane is assumed to be deployed at OBU. Typically, Mitvane is connected with two network interfaces of the OBU. The source network interface is the one that captures packets on the IEEE 802.11p channel, while the destination interface is the one connected with ITS applications. The ITS applications transform data included in V2X messages and publish to ROS topics shared with the autonomous vehicle's core process. A simple application is available at https://github.com/camsenec/its_apps.
 
-<img src=https://mitvane.s3.eu-north-1.amazonaws.com/arch.png>
+<img src=https://mitvane.s3.eu-north-1.amazonaws.com/mitvane.png>
 
 ## Detection rule file
 Detection rules can be written by YAML. Here is an example to drop packet coming from outside of a circle with a radius 200m centerd on the ego-vehicle.
@@ -60,6 +60,7 @@ Detection rules can be written by YAML. Here is an example to drop packet coming
       distance_a: 100
       distance_b: 100
 ```
+An example detection file is available at https://github.com/camsenec/mitvane/tree/master/example_rule.
 
 ### action
 The `action` determines what happens when the rule matches. The supported actions are 
