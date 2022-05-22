@@ -54,13 +54,16 @@ add_executable(mitvane
     idps_context.cpp
 )
 
-target_link_libraries(mitvane
-    PUBLIC Boost::system
+target_link_libraries(mitvane PRIVATE
+    Vanetza-extension::vanetza-extension
+)
+
+target_link_libraries(mitvane PRIVATE
+    Boost::system
     Boost::program_options
     Boost::log_setup
     Boost::log
     Threads::Threads 
-    Vanetza-extension::vanetza-extension
     Vanetza::btp
     Vanetza::geonet
     Mitvane::decoder
