@@ -28,6 +28,7 @@
 #include "mitvane/app_layer_parser/spatem_application_parser.hpp"
 #include "mitvane/app_layer_parser/mapem_application_parser.hpp"
 #include "mitvane/rule_reader/rule_reader.hpp"
+#include "mitvane/message_handler/logging.hpp"
 #include <vanetza/common/manual_runtime.hpp>
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/signal_set.hpp>
@@ -182,6 +183,9 @@ int main(int argc, const char** argv)
             std::cout << "Enable application parser '" << app.first << "'...\n";
             context.enable(app.second.get());
         }
+
+        // Initialize log file
+        mitvane::Logging::init_log();
 
         io_service.run();
     } catch (PositioningException& e) {

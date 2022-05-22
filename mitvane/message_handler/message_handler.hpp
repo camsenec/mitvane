@@ -35,7 +35,7 @@ enum class HandleReport {
 class MessageHandler
 {   
     public:
-        MessageHandler();
+        MessageHandler() = default;
         HandleReport handle(std::vector<Signature>& sigs);
     private:
         boost::log::sources::logger lg;
