@@ -33,6 +33,8 @@
 #include <vanetza/net/ethernet_header.hpp>
 #include <vanetza/access/data_request.hpp>
 #include <iostream>
+#include <fstream>
+#include <chrono>
 
 
 IdpsContext::IdpsContext(const vanetza::geonet::MIB& mib, vanetza::PositionProvider& positioning, signatures_type& signatures, RawSocketLink* destination_link) :
@@ -65,18 +67,42 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
         std::cout << "received packet from " << hdr.source << " (" << packet.size() << " bytes)\n";
         mitvane::DetectionContext detection_context;
         
+        std::ofstream result;
+        result.open("data.csv", std::ios::app);
+        
+        std::chrono::_V2::system_clock::time_point start, end;
+        std::chrono::microseconds duration;
+
+        auto total_start = std::chrono::high_resolution_clock::now();
+        start = std::chrono::high_resolution_clock::now();
         // 1. Decode
         std::unique_ptr<vanetza::PacketVariant> packet_ptr { new vanetza::PacketVariant(packet) };
         mitvane::GeonetDecoder decoder(mib_, detection_context);
         decoder.decode(std::move(packet_ptr), hdr.source, hdr.destination);
+        
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        result << duration.count() << ",";
+        start = std::chrono::high_resolution_clock::now();
         
         if (detection_context.btp_data) {
              // 2. Classify and get handler
             mitvane::Classifier classifier(detection_context);
             ApplicationLayerParser* parser = classifier.classify(m_app_layer_parsers);
 
+            end = std::chrono::high_resolution_clock::now();
+            duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            result << duration.count() << ",";
+            start = std::chrono::high_resolution_clock::now();
+
             // 3. Apply application layer parser
             parser->parse(std::unique_ptr<vanetza::PacketVariant>(std::move(detection_context.payload)));
+
+
+            end = std::chrono::high_resolution_clock::now();
+            duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+            result << duration.count() << ",";
+            start = std::chrono::high_resolution_clock::now();
         }
         // 4. Detect using detection_context, position and signatures
         mitvane::DetectionReport detection_report; 
@@ -85,6 +111,10 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
             mitvane::GeonetDetector detector = mitvane::GeonetDetector(detection_context.geonet_data, positioning_);
             detection_report = detector.detect(signatures_);
         }
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        result << duration.count() << ",";
+        start = std::chrono::high_resolution_clock::now();
         // TODO: Application layer
 
         // 5. Handle (Logging) 
@@ -94,10 +124,26 @@ void IdpsContext::run(vanetza::CohesivePacket&& packet, const vanetza::EthernetH
             handle_report = message_handler.handle(detection_report.sigs);
         }
 
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        result << duration.count() << ",";
+        start = std::chrono::high_resolution_clock::now();
+
+
         // 6. Forward
         if (handle_report != mitvane::HandleReport::Drop) {
             destination_link_->transmit(std::move(packet));
         }
+        
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        result << duration.count() << ",";
+
+
+        auto total_end = std::chrono::high_resolution_clock::now();
+        auto total_duration = std::chrono::duration_cast<std::chrono::microseconds>(total_end - total_start);
+        result << total_duration.count() << std::endl;
+        result.close();
         
     }
 

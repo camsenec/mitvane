@@ -25,9 +25,6 @@
 namespace mitvane
 {
 
-MessageHandler::MessageHandler(){
-    mitvane::Logging::init_log();
-}
 
 
 std::string action_to_string(Action& action){
